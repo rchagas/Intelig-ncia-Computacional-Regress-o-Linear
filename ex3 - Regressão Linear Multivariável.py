@@ -1,47 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plot
+import gradient_descent as gd
+ 
 from mpl_toolkits.mplot3d import axes3d, Axes3D
-
-def computeCost (X,Y,theta):
-	m = len(Y)
-	J = 0
-	pred = [(theta[0]+theta[1]*x1+theta[2]*x2) for x1,x2 in zip(X[0],X[1])]
-	sqrErro = [(y-h)**2 for y,h in zip(Y,pred)]
-	J = 1/(2*m)*sum(sqrErro)
-	return J
-
-def gradientDescent(X,Y,theta,alpha,iteracoes):
-	m = len(Y)
-	jPrev = [0 for i in range(iteracoes)]
-	for i in range(iteracoes):
-		h = [(theta[0]+theta[1]*x1+theta[2]*x2) for x1,x2 in zip(X[0],X[1])]
-		erro = [h-y for h,y in zip(h,Y)]
-		thetaNew = [theta[0] - alpha*(1/m) * sum(erro),
-					theta[1] - alpha*(1/m) * sum([erro*x for x,erro in zip(X[0],erro)]),
-					theta[2] - alpha*(1/m) * sum([erro*x for x,erro in zip(X[1],erro)])]
-		theta = thetaNew
-		jPrev[i] = computeCost(X,Y,theta)
-		
-	return theta, jPrev
-		 
-	
 
 #inicializando dados do arquivo
 data = np.loadtxt('ex1data2.txt', delimiter=',')
 
 #define numero de iterações e o valor de alpha
-iterations = 1500
-alpha = 0.3
+iterations = 2500
+alpha = 0.5
 
 #iniciando X com mesma escala 0 a 1 
-X = [[i[0]/5000 for i in data],[i[1]/5 for i in data]]
+X = [[1 for i in data],[i[0]/5000 for i in data],[i[1]/5 for i in data]]
 Y = [i[2] for i in data]
 
 #inciando valores de theta e m
-theta = [0,0,0]
-m = len(X[0])
 
-theta, J = gradientDescent(X,Y,theta,alpha,iterations)
+theta, J = gd.gradientDescent(X,Y,alpha,iterations)
 
 print("J (Custo) = ", min(J))
 print("theta_0 = ", theta[0])
